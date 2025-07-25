@@ -53,6 +53,29 @@ const deleteUser = async (req, res) => {
   res.status(200).end("deleted successfully");
 };
 
+const transfer = async (req,res) => {
+
+  const SenderId = req.body.SenderId;
+  const ReceiverId = req.body.ReceiverId;
+  const transferAmount = req.body.transfer;
+
+  const sender = await usermodel.findById(SenderId);
+  account.balance -= transferAmount;
+  await sender.save();
+
+    const receiver = await usermodel.findByIdAndUpdate(
+    ReceiverId,
+    { $inc: { balance: transferAmount } },
+    { new: true }
+  );
+
+    res.json({
+    message: "Money transfered successfully",
+    YourBalance: account.balance,
+  });
+
+};
+
 export {
   viewAllUsers,
   showBalanceInquery,
@@ -60,4 +83,5 @@ export {
   deposite,
   withdraw,
   deleteUser,
+  transfer
 };

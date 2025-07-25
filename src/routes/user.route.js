@@ -6,6 +6,7 @@ import {
     deposite,
     withdraw,
     deleteUser,
+    transfer
 } from "../controller/user.controller.js";
 
 const router = express.Router();
@@ -21,5 +22,8 @@ router.patch("/api/accounts/deposit/:accountId", deposite);
 router.patch("/api/accounts/withdraw/:accountId", withdraw);
 
 router.delete("/api/accounts/delete/:accountId", deleteUser);
+
+router.patch("/api/accounts/transfer", transfer);
+
 
 export default router;
