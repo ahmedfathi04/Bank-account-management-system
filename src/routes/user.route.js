@@ -1,29 +1,23 @@
 import express from "express";
+import {registerUserValidationSchema, loginValidationSchema} from "../middlewares/validationschema.js";
+import {verifyToken} from "../middlewares/verifytoken.js";
+import {allowedTo} from "../middlewares/allowedto.js";
 import {
     viewAllUsers,
-    showBalanceInquery,
     createUser,
-    deposite,
-    withdraw,
+    login,
     deleteUser,
-    transfer
 } from "../controller/user.controller.js";
 
 const router = express.Router();
 
-router.get("/api/accounts", viewAllUsers);
+router.get("/api/users", verifyToken, allowedTo('admin'), viewAllUsers);
 
-router.get("/api/accounts/balance-inquery/:accountId", showBalanceInquery);
+router.post("/api/users/create", registerUserValidationSchema, createUser);
 
-router.post("/api/accounts/create", createUser);
+router.post("/api/users/login", loginValidationSchema, login);
 
-router.patch("/api/accounts/deposit/:accountId", deposite);
-
-router.patch("/api/accounts/withdraw/:accountId", withdraw);
-
-router.delete("/api/accounts/delete/:accountId", deleteUser);
-
-router.patch("/api/accounts/transfer", transfer);
+router.delete("/api/users/delete/:accountId", verifyToken, allowedTo('admin'), deleteUser);
 
 
 export default router;
